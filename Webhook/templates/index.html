@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downtime Caller - Setup Instructions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .section h3 {
+            color: #34495e;
+            font-size: 1.3em;
+            margin: 20px 0 10px 0;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .card h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .step {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .endpoint {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .endpoint-method {
+            background: #007bff;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .endpoint-method.get {
+            background: #28a745;
+        }
+        
+        .endpoint-method.post {
+            background: #007bff;
+        }
+        
+        ul {
+            margin: 10px 0 10px 20px;
+        }
+        
+        li {
+            margin: 5px 0;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .quick-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .quick-link {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .quick-link:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-running {
+            background: #27ae60;
+        }
+        
+        .status-warning {
+            background: #f39c12;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 Downtime Caller</h1>
+            <p>Automated Phone Call Alerts for Uptime Kuma Monitoring</p>
+            <div class="quick-links">
+                <a href="/health" class="quick-link">🏥 Health Check</a>
+                <a href="/trigger-call" class="quick-link">📞 Test Calls</a>
+                <a href="javascript:window.location.reload()" class="quick-link">🔄 Refresh</a>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Service Status -->
+            <div class="section">
+                <h2>🔍 Service Status</h2>
+                <div class="success">
+                    <span class="status-indicator status-running"></span>
+                    <strong>Service Running:</strong> Webhook service is active on port 5000
+                </div>
+                {{ env_status|safe }}
+            </div>
+            
+            <!-- Quick Start -->
+            <div class="section">
+                <h2>🚀 Quick Start Guide</h2>
+                <div class="grid">
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <strong>Configure Twilio Credentials</strong><br>
+                        Set up your Twilio account and environment variables
+                    </div>
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <strong>Set Phone Numbers</strong><br>
+                        Configure phone numbers to call during downtime
+                    </div>
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <strong>Add Webhook to Uptime Kuma</strong><br>
+                        Configure notifications in your Uptime Kuma dashboard
+                    </div>
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <strong>Test Integration</strong><br>
+                        Test the webhook using the /trigger-call endpoint
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Environment Variables -->
+            <div class="section">
+                <h2>⚙️ Environment Variables Setup</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h4>🔑 TWILIO_ACCOUNT_SID</h4>
+                        <p><strong>Description:</strong> Your Twilio Account SID</p>
+                        <p><strong>Example:</strong> ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+                        <p><strong>Get it from:</strong> Twilio Console → Account Info</p>
+                    </div>
+                    <div class="card">
+                        <h4>🔐 TWILIO_AUTH_TOKEN</h4>
+                        <p><strong>Description:</strong> Your Twilio Auth Token</p>
+                        <p><strong>Example:</strong> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+                        <p><strong>Get it from:</strong> Twilio Console → Account Info</p>
+                    </div>
+                    <div class="card">
+                        <h4>📱 TWILIO_PHONE_NUMBER</h4>
+                        <p><strong>Description:</strong> Your Twilio phone number (from number)</p>
+                        <p><strong>Example:</strong> +1234567890</p>
+                        <p><strong>Get it from:</strong> Purchase a phone number in Twilio Console</p>
+                    </div>
+                    <div class="card">
+                        <h4>📞 PHONE_NUMBERS</h4>
+                        <p><strong>Description:</strong> Comma-separated list of phone numbers to call</p>
+                        <p><strong>Example:</strong> +1234567890,+0987654321</p>
+                        <p><strong>Note:</strong> Include country code, separate with commas</p>
+                    </div>
+                </div>
+                
+                <h3>Setup Commands</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>🪟 Windows</h4>
+                        <div class="code-block">
+set TWILIO_ACCOUNT_SID=your_account_sid<br>
+set TWILIO_AUTH_TOKEN=your_auth_token<br>
+set TWILIO_PHONE_NUMBER=+1234567890<br>
+set PHONE_NUMBERS=+1234567890,+0987654321
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h4>🐧 Linux/Mac</h4>
+                        <div class="code-block">
+export TWILIO_ACCOUNT_SID=your_account_sid<br>
+export TWILIO_AUTH_TOKEN=your_auth_token<br>
+export TWILIO_PHONE_NUMBER=+1234567890<br>
+export PHONE_NUMBERS=+1234567890,+0987654321
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- API Endpoints -->
+            <div class="section">
+                <h2>🔌 API Endpoints</h2>
+                <div class="endpoint">
+                    <span class="endpoint-method get">GET</span>
+                    <strong>/</strong> - This instruction page with complete setup guide<br>
+                    <div class="code-block">curl http://localhost:5000/</div>
+                </div>
+                <div class="endpoint">
+                    <span class="endpoint-method get">GET</span>
+                    <strong>/health</strong> - Health check endpoint for monitoring service status<br>
+                    <div class="code-block">curl http://localhost:5000/health</div>
+                </div>
+                <div class="endpoint">
+                    <span class="endpoint-method post">POST</span>
+                    <strong>/trigger-call</strong> - Trigger phone calls for downtime alerts<br>
+                    <div class="code-block">curl -X POST http://localhost:5000/trigger-call</div>
+                </div>
+            </div>
+            
+            <!-- Uptime Kuma Integration -->
+            <div class="section">
+                <h2>📊 Uptime Kuma Integration</h2>
+                <div class="grid">
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <strong>Access Uptime Kuma Dashboard</strong><br>
+                        Visit: <code>http://localhost:3001</code> (default)
+                    </div>
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <strong>Go to Settings → Notifications</strong><br>
+                        Add a new notification method
+                    </div>
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <strong>Select Webhook notification type</strong><br>
+                        Webhook URL: <code>http://localhost:5000/trigger-call</code>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <strong>Assign webhook to monitors</strong><br>
+                        Edit your monitors and add the webhook notification
+                    </div>
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <strong>Test the integration</strong><br>
+                        Use the Test button in Uptime Kuma notifications
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testing -->
+            <div class="section">
+                <h2>🧪 Testing</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h4>Manual Test</h4>
+                        <p>Test webhook manually:</p>
+                        <div class="code-block">
+curl -X POST http://localhost:5000/trigger-call<br>
+curl -X GET http://localhost:5000/trigger-call
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h4>Health Check</h4>
+                        <p>Verify service is running:</p>
+                        <div class="code-block">
+curl http://localhost:5000/health
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Troubleshooting -->
+            <div class="section">
+                <h2>🔧 Troubleshooting</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h4>❌ Credentials Not Configured</h4>
+                        <p><strong>Error:</strong> Twilio credentials not configured</p>
+                        <p><strong>Solution:</strong> Set all required environment variables before starting the service</p>
+                    </div>
+                    <div class="card">
+                        <h4>📞 Phone Numbers Not Set</h4>
+                        <p><strong>Error:</strong> Phone numbers not configured</p>
+                        <p><strong>Solution:</strong> Set PHONE_NUMBERS environment variable with valid phone numbers</p>
+                    </div>
+                    <div class="card">
+                        <h4>🚫 Authentication Error</h4>
+                        <p><strong>Error:</strong> Twilio authentication failed</p>
+                        <p><strong>Solution:</strong> Verify your Account SID and Auth Token are correct</p>
+                    </div>
+                    <div class="card">
+                        <h4>📱 Invalid Phone Number</h4>
+                        <p><strong>Error:</strong> Phone number format invalid</p>
+                        <p><strong>Solution:</strong> Use E.164 format: +[country_code][phone_number]</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Twilio Setup -->
+            <div class="section">
+                <h2>🌐 Twilio Setup Guide</h2>
+                <ol>
+                    <li><strong>Sign up for Twilio account</strong> at <a href="https://www.twilio.com" target="_blank">https://www.twilio.com</a></li>
+                    <li><strong>Verify your phone number</strong> in Twilio Console</li>
+                    <li><strong>Purchase a Twilio phone number</strong> (required for outbound calls)</li>
+                    <li><strong>Find Account SID and Auth Token</strong> in Console Dashboard</li>
+                    <li><strong>Add funds to your Twilio account</strong> for call charges</li>
+                </ol>
+                <div class="warning">
+                    <strong>💰 Pricing Info:</strong> Calls typically cost $0.01-0.02 per minute depending on destination
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>🚨 <strong>Downtime Caller Webhook Service</strong> v1.0.0</p>
+            <p>Automated phone call alerts for Uptime Kuma monitoring</p>
+            <p>Made By Hitesh Chouhan</p>
+            <div class="quick-links">
+                <a href="https://github.com/hiteshchouhan22/downtime_caller" class="quick-link" target="_blank">📚 GitHub</a>
+                <a href="https://www.twilio.com/docs/voice/make-calls" class="quick-link" target="_blank">📖 Twilio Docs</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

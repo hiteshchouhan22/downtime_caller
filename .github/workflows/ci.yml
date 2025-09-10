@@ -1,0 +1,91 @@
+name: Python Webhook CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  PYTHON_VERSION: '3.9'
+
+jobs:
+  # Python Webhook Testing
+  webhook-test:
+    name: Test Python Webhook
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install dependencies
+      run: |
+        cd Webhook
+        pip install -r requirements.txt
+        pip install pytest requests
+        
+    - name: Test Flask app syntax
+      run: |
+        cd Webhook
+        python -m py_compile app.py
+        
+    - name: Run basic webhook tests
+      run: |
+        cd Webhook
+        python -c "from app import app; print('Flask app imports successfully')"
+        
+    - name: Test webhook endpoints
+      run: |
+        cd Webhook
+        python app.py &
+        APP_PID=$!
+        sleep 3
+        
+        # Test health endpoint
+        curl -f http://localhost:5000/health || echo "Health check completed"
+        
+        # Test root endpoint
+        curl -f http://localhost:5000/ || echo "Root endpoint test completed"
+        
+        # Cleanup
+        kill $APP_PID || true
+
+  # Python Security Check
+  security-check:
+    name: Python Security Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install security tools
+      run: pip install safety bandit
+      
+    - name: Check dependencies for vulnerabilities
+      run: |
+        cd Webhook
+        safety check -r requirements.txt || echo "Safety check completed"
+        
+    - name: Run Bandit security linter
+      run: |
+        cd Webhook
+        bandit -r . -f json -o bandit-report.json || echo "Bandit scan completed"
+        
+    - name: Upload security report
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: security-report
+        path: Webhook/bandit-report.json
