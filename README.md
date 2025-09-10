@@ -233,7 +233,7 @@ This project is licensed under the MIT License.
 **Quick Commands:**
 ```bash
 # Install and run
-cd f:\downtime_caller\Webhook
+cd ./downtime_caller/Webhook
 pip install -r requirements.txt
 python app.py
 
